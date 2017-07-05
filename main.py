@@ -59,18 +59,11 @@ docs = list(df['text'])
 %%time
 processed_docs = []    
 for doc in nlp.pipe(docs, n_threads=4, batch_size=100):
-    # Process document using Spacy NLP pipeline.
-    
-    ents = doc.ents  # Named entities.
 
-    # Keep only words (no numbers, no punctuation).
-    # Lemmatize tokens, remove punctuation and remove stopwords.
+    ents = doc.ents  
+
     doc = [token.lemma_ for token in doc if token.is_alpha and not token.is_stop]
 
-    # Remove common words from a stopword list.
-    #doc = [token for token in doc if token not in STOPWORDS]
-
-    # Add named entities, but only if they are a compound of more than word.
     doc.extend([str(entity) for entity in ents if len(entity) > 1])
     
     processed_docs.append(doc)
@@ -82,35 +75,27 @@ del processed_docs
 #%%
 # Compute bigrams.
 from gensim.models import Phrases
-# Add bigrams and trigrams to docs (only ones that appear 20 times or more).
+
 bigram = Phrases(docs, min_count=20)
 for idx in range(len(docs)):
     for token in bigram[docs[idx]]:
         if '_' in token:
-            # Token is a bigram, add to document.
             docs[idx].append(token)
 
 
 #%%
 
-# Create a dictionary representation of the documents, and filter out frequent and rare words.
 
 from gensim.corpora import Dictionary
 dictionary = Dictionary(docs)
 
-# Remove rare and common tokens.
-# Filter out words that occur too frequently or too rarely.
 max_freq = 0.5
 min_wordcount = 20
 dictionary.filter_extremes(no_below=min_wordcount, no_above=max_freq)
 
-_ = dictionary[0]  # This sort of "initializes" dictionary.id2token.
-
-
+_ = dictionary[0] 
 #%%
-# Vectorize data.
 
-# Bag-of-words representation of the documents.
 corpus = [dictionary.doc2bow(doc) for doc in docs]
 #%% Borrar tweets vacios y actualizar corpus
 
@@ -151,13 +136,17 @@ for index, row in df.iterrows():
     author2doc[row['screen_name']].append(index)
 
 #%%
-print('Number of authors: %d' % len(author2doc))
-print('Number of unique tokens: %d' % len(dictionary))
-print('Number of documents: %d' % len(corpus))
+print('# de autores: %d' % len(author2doc))
+print('# tokens unicos: %d' % len(dictionary))
+print('# de documentos: %d' % len(corpus))
 
 #%%
 %%time
 from gensim.models import AuthorTopicModel
 model = AuthorTopicModel(corpus=corpus, num_topics=100, id2word=dictionary.id2token, author2doc=author2doc, chunksize=4000, passes=25, eval_every=1, iterations=400)
 #%%
+model.save('modelo1/model.atmodel')
 
+#%% Actualizar modelo
+%%time
+model_ser = AuthorTopicModel(corpus=corpus, num_topics=10, id2word=dictionary.id2token, author2doc=author2doc, random_state=1, serialized=True,serialization_path='modelo1/model_serialization.mm')
