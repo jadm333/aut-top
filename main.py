@@ -37,7 +37,7 @@ for file_ in allFiles:
     del df['modification_date']
     del df['RT_temp']
     del df['is_retweeted']
-    df = df.loc[df['created_at_datetime'] > "2017-05-27"]
+    df = df.loc[df['created_at_datetime'] > "2017-07-04"]
     df['text'] = df['text'].apply(p.clean)
     df['text'].replace('', np.nan, inplace=True)
     df.dropna(subset=['text'], inplace=True)
@@ -56,7 +56,7 @@ nlp = spacy.load('es')
 #%%
 docs = list(df['text'])
 #%%
-%%time
+#%%time
 processed_docs = []    
 for doc in nlp.pipe(docs, n_threads=4, batch_size=100):
 
@@ -141,12 +141,12 @@ print('# tokens unicos: %d' % len(dictionary))
 print('# de documentos: %d' % len(corpus))
 
 #%%
-%%time
+#%%time
 from gensim.models import AuthorTopicModel
-model = AuthorTopicModel(corpus=corpus, num_topics=100, id2word=dictionary.id2token, author2doc=author2doc, chunksize=4000, passes=25, eval_every=1, iterations=400)
+model = AuthorTopicModel(corpus=corpus, num_topics=100, id2word=dictionary.id2token, author2doc=author2doc, chunksize=1000, passes=25, eval_every=1, iterations=400)
 #%%
-model.save('modelo1/model.atmodel')
+model.save('modelo4/model.atmodel')
 
 #%% Actualizar modelo
-%%time
-model_ser = AuthorTopicModel(corpus=corpus, num_topics=10, id2word=dictionary.id2token, author2doc=author2doc, random_state=1, serialized=True,serialization_path='modelo1/model_serialization.mm')
+#%%time
+#model_ser = AuthorTopicModel(corpus=corpus, num_topics=10, id2word=dictionary.id2token, author2doc=author2doc, random_state=1, serialized=True,serialization_path='modelo1/model_serialization.mm')
