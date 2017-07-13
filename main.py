@@ -145,7 +145,7 @@ print('# de documentos: %d' % len(corpus))
 from gensim.models import AuthorTopicModel
 model = AuthorTopicModel(corpus=corpus, num_topics=100, id2word=dictionary.id2token, author2doc=author2doc, chunksize=1000, passes=25, eval_every=1, iterations=400)
 #%%
-model.save('modelo4/model.atmodel')
+model.save('modelo5/model.atmodel')
 
 #%% Actualizar modelo
 #%%time
