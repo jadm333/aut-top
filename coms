@@ -1,0 +1,16 @@
+gcloud projects list 
+
+gcloud config set core/project cbp100-167202
+
+gcloud config set compute/zone us-central1-f
+
+datalab create twitterauttopicmodel
+
+conda create --name autop pandas numpy spacy gensim scikit-learn bokeh
+
+
+wget https://repo.continuum.io/archive/Anaconda3-4.4.0-Linux-x86_64.sh
+
+gcloud compute ssh --zone=us-central1-f --ssh-flag="-D" --ssh-flag="1080" --ssh-flag="-N" --ssh-flag="-n" instance-1
+
+jupyter notebook --ip=0.0.0.0 --port=8888 --no-browser &
