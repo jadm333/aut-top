@@ -56,7 +56,7 @@ nlp = spacy.load('es')
 #%%
 docs = list(df['text'])
 #%%
-#%%time
+%%time
 processed_docs = []    
 for doc in nlp.pipe(docs, n_threads=4, batch_size=100):
 
