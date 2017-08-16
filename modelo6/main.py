@@ -37,7 +37,7 @@ for file_ in allFiles:
     del df['modification_date']
     del df['RT_temp']
     del df['is_retweeted']
-    df = df.loc[df['created_at_datetime'] > "2017-07-04"]
+    df = df.loc[df['created_at_datetime'] > "2017-08-07"]
     df['text'] = df['text'].apply(p.clean)
     df['text'].replace('', np.nan, inplace=True)
     df.dropna(subset=['text'], inplace=True)
@@ -73,7 +73,7 @@ docs = processed_docs
 del processed_docs
 
 #%%
-# Compute bigrams.
+# Bigramas
 from gensim.models import Phrases
 
 bigram = Phrases(docs, min_count=20)
@@ -138,16 +138,16 @@ print('# tokens unicos: %d' % len(dictionary))
 print('# de documentos: %d' % len(corpus))
 
 #%%
-#%%time
+%%time
 from gensim.models import AuthorTopicModel
-model = AuthorTopicModel(corpus=corpus, num_topics=100, id2word=dictionary.id2token, author2doc=author2doc, chunksize=2000, passes=55, eval_every=0, iterations=10000000,gamma_threshold=1e-11)
+model = AuthorTopicModel(corpus=corpus, num_topics=20, id2word=dictionary.id2token, author2doc=author2doc, chunksize=2000, passes=55, eval_every=0, iterations=10000000,gamma_threshold=1e-11)
 #%%
-model.save('modelo7/model.atmodel')
+model.save('modelo9/model.atmodel')
 
 
 #%%
 import pickle
-pickle.dump(dictionary, open("modelo7/dictionary.p", "wb"))
+pickle.dump(dictionary, open("modelo9/dictionary.p", "wb"))
 #%% Actualizar modelo
 #%%time
 #model_ser = AuthorTopicModel(corpus=corpus, num_topics=10, id2word=dictionary.id2token, author2doc=author2doc, random_state=1, serialized=True,serialization_path='modelo1/model_serialization.mm')
