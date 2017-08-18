@@ -37,7 +37,7 @@ for file_ in allFiles:
     del df['modification_date']
     del df['RT_temp']
     del df['is_retweeted']
-    df = df.loc[df['created_at_datetime'] > "2017-08-07"]
+    df = df.loc[df['created_at_datetime'] > "2017-08-03"]
     df['text'] = df['text'].apply(p.clean)
     df['text'].replace('', np.nan, inplace=True)
     df.dropna(subset=['text'], inplace=True)
@@ -50,11 +50,35 @@ del frame
 del list_
 del path
 
+#%% Quitar simbolos
+
+
+df['text'] = df['text'].str.replace('@','')
+df['text'] = df['text'].str.replace('#','')
+df['text'] = df['text'].str.replace('!','')
+df['text'] = df['text'].str.replace('¿','')
+df['text'] = df['text'].str.replace('?','')
+df['text'] = df['text'].str.replace("'",'')
+df['text'] = df['text'].str.replace('"','')
+df['text'] = df['text'].str.replace('%','')
+df['text'] = df['text'].str.replace('+','')
+df['text'] = df['text'].str.replace('=','')
+df['text'] = df['text'].str.replace('`','')
+df['text'] = df['text'].str.replace('~','')
+df['text'] = df['text'].str.replace('|','')
+df['text'] = df['text'].str.replace(';','')
+df['text'] = df['text'].str.replace('.','')
+
+
 #%%
 import spacy
 nlp = spacy.load('es')
+
+nlp.vocab["y"].is_stop = True
+nlp.vocab["a"].is_stop = True
 #%%
 docs = list(df['text'])
+
 #%%
 %%time
 processed_docs = []    
@@ -140,14 +164,19 @@ print('# de documentos: %d' % len(corpus))
 #%%
 %%time
 from gensim.models import AuthorTopicModel
-model = AuthorTopicModel(corpus=corpus, num_topics=20, id2word=dictionary.id2token, author2doc=author2doc, chunksize=2000, passes=55, eval_every=0, iterations=10000000,gamma_threshold=1e-11)
+model = AuthorTopicModel(corpus=corpus, num_topics=100, id2word=dictionary.id2token, author2doc=author2doc, chunksize=2000, passes=55, eval_every=0, iterations=100000,gamma_threshold=1e-11)
 #%%
-model.save('modelo9/model.atmodel')
+model.save('modelo10/model.atmodel')
 
+#%%  LDA
 
-#%%
+%%time
+from gensim.models import LdaModel
+ldamodel = LdaModel(corpus=corpus, num_topics=100, id2word=dictionary)
+
+#%%  SALVAR LDA
+
 import pickle
-pickle.dump(dictionary, open("modelo9/dictionary.p", "wb"))
-#%% Actualizar modelo
-#%%time
-#model_ser = AuthorTopicModel(corpus=corpus, num_topics=10, id2word=dictionary.id2token, author2doc=author2doc, random_state=1, serialized=True,serialization_path='modelo1/model_serialization.mm')
+pickle.dump(ldamodel, open("LDA/ldamodel.p", "wb"))
+pickle.dump(corpus, open("LDA/corpus.p", "wb"))
+pickle.dump(dictionary, open("LDA/dictionary.p", "wb"))
