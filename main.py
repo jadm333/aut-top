@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 """
 @author: PEPE
-Correr en spyder
+Correr en spyder linux
 """
 #%%
 import os
-os.chdir("C:/Users/PEPE/Documents/GitHub/aut-top")
+os.chdir("/home/peps/Documentos/aut-top")
 import pandas as pd
 import glob
 import os
@@ -76,6 +76,43 @@ nlp = spacy.load('es')
 
 nlp.vocab["y"].is_stop = True
 nlp.vocab["a"].is_stop = True
+nlp.vocab["ante"].is_stop = True
+nlp.vocab["a"].is_stop = True
+nlp.vocab["bajo"].is_stop = True
+nlp.vocab["con"].is_stop = True
+nlp.vocab["de"].is_stop = True
+nlp.vocab["desde"].is_stop = True
+nlp.vocab["durante"].is_stop = True
+nlp.vocab["en"].is_stop = True
+nlp.vocab["entre"].is_stop = True
+nlp.vocab["excepto"].is_stop = True
+nlp.vocab["hacia"].is_stop = True
+nlp.vocab["hasta"].is_stop = True
+nlp.vocab["mediante"].is_stop = True
+nlp.vocab["para"].is_stop = True
+nlp.vocab["por"].is_stop = True
+nlp.vocab["salvo"].is_stop = True
+nlp.vocab["según"].is_stop = True
+nlp.vocab["sin"].is_stop = True
+nlp.vocab["sobre"].is_stop = True
+nlp.vocab["tras"].is_stop = True
+nlp.vocab["y"].is_stop = True
+nlp.vocab["e"].is_stop = True
+nlp.vocab["ni"].is_stop = True
+nlp.vocab["o"].is_stop = True
+nlp.vocab["u"].is_stop = True
+nlp.vocab["que"].is_stop = True
+nlp.vocab["si"].is_stop = True
+nlp.vocab["como"].is_stop = True
+nlp.vocab["donde"].is_stop = True
+nlp.vocab["quien"].is_stop = True
+nlp.vocab["cual"].is_stop = True
+nlp.vocab["cuyo"].is_stop = True
+nlp.vocab["cuanto"].is_stop = True
+nlp.vocab["el"].is_stop = True
+nlp.vocab["lalos"].is_stop = True
+nlp.vocab["las"].is_stop = True
+
 #%%
 docs = list(df['text'])
 
@@ -127,7 +164,7 @@ id_borrar = [i for i in range(0,len(corpus)) if len(corpus[i]) == 0]
 df = df.drop(df.index[id_borrar])
 df = df.reset_index(drop=True)
 docs = list(df['text'])
-processed_docs = []    
+processed_docs = []
 for doc in nlp.pipe(docs, n_threads=4, batch_size=100):
     ents = doc.ents
 
@@ -166,7 +203,7 @@ print('# de documentos: %d' % len(corpus))
 from gensim.models import AuthorTopicModel
 model = AuthorTopicModel(corpus=corpus, num_topics=100, id2word=dictionary.id2token, author2doc=author2doc, chunksize=2000, passes=55, eval_every=0, iterations=100000,gamma_threshold=1e-11)
 #%%
-model.save('modelo10/model.atmodel')
+model.save('modelo11/model.atmodel')
 
 #%%  LDA
 
@@ -177,6 +214,6 @@ ldamodel = LdaModel(corpus=corpus, num_topics=100, id2word=dictionary)
 #%%  SALVAR LDA
 
 import pickle
-pickle.dump(ldamodel, open("LDA/ldamodel.p", "wb"))
-pickle.dump(corpus, open("LDA/corpus.p", "wb"))
-pickle.dump(dictionary, open("LDA/dictionary.p", "wb"))
+pickle.dump(ldamodel, open("modelo11/LDA/ldamodel.p", "wb"))
+pickle.dump(corpus, open("modelo11/LDA/corpus.p", "wb"))
+pickle.dump(dictionary, open("modelo11/LDA/dictionary.p", "wb"))
