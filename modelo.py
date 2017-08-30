@@ -6,7 +6,8 @@
 #%%
 
 #%% Paqueterias
-
+import sys
+import re
 import os
 import pandas as pd
 import glob
@@ -15,6 +16,9 @@ import numpy as np
 import spacy
 from gensim.corpora import Dictionary
 from gensim.models import Phrases
+from gensim.models import AuthorTopicModel
+from gensim.models import LdaModel
+import pickle
 # Leer Archivos scv
 
 #%%
@@ -55,9 +59,41 @@ def archivos_csv(path="Archivos_csv/"):
     del list_
     del path
     return df
+#%%
+def entidades(docs,nlp):
+    processed_docs = []
+    for doc in nlp.pipe(docs, n_threads=4, batch_size=100):
+        ents = doc.ents  
+
+        doc = [token.lemma_ for token in doc if token.is_alpha and not token.is_stop]
+
+        doc.extend([str(entity) for entity in ents if len(entity) > 1])
+        
+        processed_docs.append(doc)
+
+    return processed_docs
+
+def bigramas(docs):
+    bigram = Phrases(docs, min_count=20)
+    doc = docs
+    for idx in range(len(doc)):
+        for token in bigram[doc[idx]]:
+            if '_' in token:
+                doc[idx].append(token)
+    return doc
+
+def filtrar_extremos(docs,max_freq=0.5,min_wordcount=2,n_top=3):
+    dictionary = Dictionary(docs)
+    dictionary.filter_extremes(no_below=min_wordcount, no_above=max_freq)
+    dictionary.filter_n_most_frequent(n_top)
+    _ = dictionary[0]
+
+    return dictionary
+
+
 
 #%%
-def preprocesamiento(df,max_freq=0.5):
+def preprocesamiento(df):
     df['text'] = df['text'].str.replace('@', '')
     df['text'] = df['text'].str.replace('#', '')
     df['text'] = df['text'].str.replace('!', '')
@@ -78,10 +114,15 @@ def preprocesamiento(df,max_freq=0.5):
     df['text'] = df['text'].str.replace('é', '')
     df['text'] = df['text'].str.replace('.', '')
     df['text'] = df['text'].str.replace('‘', '')
+    df['text'] = df['text'].str.replace('“', '')
+    df['text'] = df['text'].str.replace('”', '')
+    df['text'] = df['text'].str.replace('¡', '')
+    df['text'] = df['text'].str.replace('º', '')
+    df['text'] = df['text'].str.replace('ª', '')
+    df['text'] = df['text'].str.replace('▶️', '')
+    df['text'] = df['text'].str.replace('ㅤ', '')
     df['text'] = df['text'].str.replace('.', '')
-    df['text'] = df['text'].str.replace('.', '')
-    df['text'] = df['text'].str.replace('.', '')
-    df['text'] = df['text'].str.replace('.', '')
+    
 
     nlp = spacy.load('es')
 
@@ -126,89 +167,72 @@ def preprocesamiento(df,max_freq=0.5):
 
     docs = list(df['text'])
 
-    processed_docs = []
-    for doc in nlp.pipe(docs, n_threads=4, batch_size=100):
+    docs = entidades(docs,nlp)
 
-        ents = doc.ents
+    docs = bigramas(docs)
 
-        doc = [token.lemma_ for token in doc if token.is_alpha and not token.is_stop]
-
-        doc.extend([str(entity) for entity in ents if len(entity) > 1])
-
-        processed_docs.append(doc)
-
-    docs = processed_docs
-    del processed_docs
-    #BIGRAMAS
-    
-
-    bigram = Phrases(docs, min_count=20)
-    for idx in range(len(docs)):
-        for token in bigram[docs[idx]]:
-            if '_' in token:
-                docs[idx].append(token)
-
-    #FILTRAR EXTREMOS
-    
-    dictionary = Dictionary(docs)
-    min_wordcount = 2
-    dictionary.filter_extremes(no_below=min_wordcount, no_above=max_freq)
-
-    dictionary.filter_n_most_frequent()
-    _ = dictionary[0]
+    dictionary = filtrar_extremos(docs)
 
     corpus = [dictionary.doc2bow(doc) for doc in docs]
 
-    # Borrar tweets vacios y actualizar corpus
-
+    #BORRAR TWEETS VACIOS
     id_borrar = [i for i in range(0,len(corpus)) if len(corpus[i]) == 0]
     df = df.drop(df.index[id_borrar])
     df = df.reset_index(drop=True)
     docs = list(df['text'])
-    processed_docs = []
-    for doc in nlp.pipe(docs, n_threads=4, batch_size=100):
-        ents = doc.ents
-
-        doc = [token.lemma_ for token in doc if token.is_alpha and not token.is_stop]
-        doc.extend([str(entity) for entity in ents if len(entity) > 1])
-        processed_docs.append(doc)
-    docs = processed_docs
-    del processed_docs
-    bigram = Phrases(docs, min_count=20)
-    for idx in range(len(docs)):
-        for token in bigram[docs[idx]]:
-            if '_' in token:
-                docs[idx].append(token)
-    dictionary = Dictionary(docs)
-    _ = dictionary[0]
+    docs = entidades(docs,nlp)
+    docs = bigramas(docs)
     corpus = [dictionary.doc2bow(doc) for doc in docs]
 
-    #Crear author2doc
+    #AUTHOR2DOC
     author2doc = {}
-    df.text.unique()
     for aut in df.screen_name.unique():
         author2doc[aut] = []
         
     for index, row in df.iterrows():
         author2doc[row['screen_name']].append(index)
 
-    print('# de autores: %d' % len(author2doc))
-    print('# tokens unicos: %d' % len(dictionary))
-    print('# de documentos: %d' % len(corpus))
 
     return corpus, dictionary, author2doc
+
+def folder():
+    all_subdirs = [d for d in os.listdir('.') if os.path.isdir(d)]
+    i = []
+    for f in all_subdirs:
+        n = re.findall('\d+', f)
+        if len(n) > 0:
+            i.append(int(n[0]))
+    return str(max(i) + 1)
+
+
 #%%
 if __name__ == '__main__':
     df = archivos_csv()
     corpus, dictionary, author2doc = preprocesamiento(df)
+    print('# de autores: %d' % len(author2doc))
+    print('# tokens unicos: %d' % len(dictionary))
+    print('# de documentos: %d' % len(corpus))
 
+    print('Corriendo modelo')
+    model = AuthorTopicModel(corpus=corpus, num_topics=100, id2word=dictionary.id2token, author2doc=author2doc, chunksize=2000, passes=55, eval_every=0, iterations=10000000,gamma_threshold=1e-11)
+    
+    f =  'modelo' + folder()
+    os.makedirs(f)
+    os.makedirs(f+'/LDA')
+    
+    model.save(f+'/model.atmodel')
+
+    print("MODELO TERMINADO Y GUARDADO")
+    #  LDA
+    print('Corriendo LDA')
+    ldamodel = LdaModel(corpus=corpus, num_topics=100, id2word=dictionary)
+
+    #  SALVAR LDA
+
+    pickle.dump(ldamodel, open(f+"/LDA/ldamodel.p", "wb"))
+    pickle.dump(corpus, open(f+"/LDA/corpus.p", "wb"))
+    pickle.dump(dictionary, open(f+"/LDA/dictionary.p", "wb"))
+    
+    print('Terminado')
 
 #%%
-df = archivos_csv()
-corpus, dictionary, author2doc = preprocesamiento(df)
-
-
-
-
-
-
