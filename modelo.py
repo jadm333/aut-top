@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 """
 @author: PEPE
-
+uso:
+    modelo.py f_ini f_fin path
 """
 #%%
 
 #%% Paqueterias
 import sys
+import datetime
 import re
 import os
 import pandas as pd
@@ -19,10 +21,15 @@ from gensim.models import Phrases
 from gensim.models import AuthorTopicModel
 from gensim.models import LdaModel
 import pickle
+import nbformat
+from nbconvert.preprocessors import ExecutePreprocessor
+
+#from shutil import copyfile
 # Leer Archivos scv
 
 #%%
-def archivos_csv(path="Archivos_csv/"):
+def archivos_csv(f_ini=(datetime.datetime.today()-datetime.timedelta(days=7)).strftime('%Y-%m-%d'),f_fin=datetime.datetime.today().strftime('%Y-%m-%d'),path="Archivos_csv/"):
+    
     allFiles = glob.glob(path + "/*.csv")
     frame = pd.DataFrame()
     list_ = []
@@ -59,7 +66,7 @@ def archivos_csv(path="Archivos_csv/"):
     del list_
     del path
     return df
-#%%
+
 def entidades(docs,nlp):
     processed_docs = []
     for doc in nlp.pipe(docs, n_threads=4, batch_size=100):
@@ -90,9 +97,6 @@ def filtrar_extremos(docs,max_freq=0.5,min_wordcount=2,n_top=3):
 
     return dictionary
 
-
-
-#%%
 def preprocesamiento(df):
     df['text'] = df['text'].str.replace('@', '')
     df['text'] = df['text'].str.replace('#', '')
@@ -206,33 +210,71 @@ def folder():
 
 
 #%%
-if __name__ == '__main__':
+
+if len(sys.argv)>1:
+    if len(sys.argv)>2:
+        if len(sys.argv)>3:
+            df = archivos_csv(sys.argv[1],sys.argv[2],sys.argv[3])
+        else:
+            df = archivos_csv(sys.argv[1],sys.argv[2])
+    else:
+        df = archivos_csv(sys.argv[1])
+else:
     df = archivos_csv()
-    corpus, dictionary, author2doc = preprocesamiento(df)
-    print('# de autores: %d' % len(author2doc))
-    print('# tokens unicos: %d' % len(dictionary))
-    print('# de documentos: %d' % len(corpus))
 
-    print('Corriendo modelo')
-    model = AuthorTopicModel(corpus=corpus, num_topics=100, id2word=dictionary.id2token, author2doc=author2doc, chunksize=2000, passes=55, eval_every=0, iterations=10000000,gamma_threshold=1e-11)
+
+corpus, dictionary, author2doc = preprocesamiento(df)
+print('# de autores: %d' % len(author2doc))
+print('# tokens unicos: %d' % len(dictionary))
+print('# de documentos: %d' % len(corpus))
+
+print('Corriendo modelo')
+model = AuthorTopicModel(corpus=corpus, num_topics=100, id2word=dictionary.id2token, author2doc=author2doc, chunksize=2000, passes=55, eval_every=0, iterations=10000000,gamma_threshold=1e-11)
+
+f =  'modelo' + folder()
+os.makedirs(f)
+os.makedirs(f+'/LDA')
+
+model.save(f+'/model.atmodel')
+
+print("MODELO TERMINADO Y GUARDADO")
+#  LDA
+print('Corriendo LDA')
+ldamodel = LdaModel(corpus=corpus, num_topics=100, id2word=dictionary)
+
+#  SALVAR LDA
+
+pickle.dump(ldamodel, open(f+"/LDA/ldamodel.p", "wb"))
+pickle.dump(corpus, open(f+"/LDA/corpus.p", "wb"))
+pickle.dump(dictionary, open(f+"/LDA/dictionary.p", "wb"))
+
+print('Terminado')
+###Copiar notebooks
+#
+#copyfile('aut_topic_model.ipynb', f+'/aut_topic_model.ipynb')
+#copyfile('LDA.ipynb', f+'/LDA/LDA.ipynb')
+
+##AUT-topic
+with open('aut_topic_model.ipynb') as file:
+    nb = nbformat.read(file, as_version=4)
     
-    f =  'modelo' + folder()
-    os.makedirs(f)
-    os.makedirs(f+'/LDA')
+ep = ExecutePreprocessor(timeout=600, kernel_name='python3')
+
+ep.preprocess(nb, {'metadata': {'path': f+'/'}})
+
+
+with open(f+'/aut_topic_model.ipynb', 'wt') as file:
+    nbformat.write(nb, file)
+
+##LDA
+with open('LDA.ipynb') as file:
+    nb = nbformat.read(file, as_version=4)
     
-    model.save(f+'/model.atmodel')
+ep = ExecutePreprocessor(timeout=600, kernel_name='python3')
 
-    print("MODELO TERMINADO Y GUARDADO")
-    #  LDA
-    print('Corriendo LDA')
-    ldamodel = LdaModel(corpus=corpus, num_topics=100, id2word=dictionary)
+ep.preprocess(nb, {'metadata': {'path': f+'/LDA/'}})
 
-    #  SALVAR LDA
 
-    pickle.dump(ldamodel, open(f+"/LDA/ldamodel.p", "wb"))
-    pickle.dump(corpus, open(f+"/LDA/corpus.p", "wb"))
-    pickle.dump(dictionary, open(f+"/LDA/dictionary.p", "wb"))
-    
-    print('Terminado')
+with open(f+'/LDA/LDA.ipynb', 'wt') as file:
+    nbformat.write(nb, file)
 
-#%%
