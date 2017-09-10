@@ -214,7 +214,7 @@ def folder():
 
 ##Correr script de R (actualiza los csv's)
 
-subprocess.call(['Rscript', 'extraer_tweets.R' ], shell=True)
+subprocess.call(['Rscript --vanilla extraer_tweets.R'], shell=True)
 
 
 ####Fecha inicio y fin
