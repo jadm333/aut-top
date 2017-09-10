@@ -23,7 +23,7 @@ from gensim.models import LdaModel
 import pickle
 import nbformat
 from nbconvert.preprocessors import ExecutePreprocessor
-
+import subprocess
 #from shutil import copyfile
 # Leer Archivos scv
 
@@ -210,6 +210,14 @@ def folder():
 
 
 #%%
+
+
+##Correr script de R (actualiza los csv's)
+
+subprocess.call(['Rscript', 'extraer_tweets.R' ], shell=True)
+
+
+####Fecha inicio y fin
 
 if len(sys.argv)>1:
     if len(sys.argv)>2:
