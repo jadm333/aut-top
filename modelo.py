@@ -24,7 +24,8 @@ import pickle
 import nbformat
 from nbconvert.preprocessors import ExecutePreprocessor
 import subprocess
-#from shutil import copyfile
+import json
+from shutil import copyfile
 # Leer Archivos scv
 
 #%%
@@ -53,7 +54,8 @@ def archivos_csv(f_ini=(datetime.datetime.today()-datetime.timedelta(days=7)).st
         del df['modification_date']
         del df['RT_temp']
         del df['is_retweeted']
-        df = df.loc[df['created_at_datetime'] > "2017-08-03"]
+        df = df.loc[df['created_at_datetime'] > f_ini]
+        df = df.loc[df['created_at_datetime'] < f_fin]
         df['text'] = df['text'].apply(p.clean)
         df['text'].replace('', np.nan, inplace=True)
         df.dropna(subset=['text'], inplace=True)
@@ -65,7 +67,7 @@ def archivos_csv(f_ini=(datetime.datetime.today()-datetime.timedelta(days=7)).st
     del frame
     del list_
     del path
-    return df
+    return df, f_ini, f_fin
 
 def entidades(docs,nlp):
     processed_docs = []
@@ -218,18 +220,18 @@ subprocess.call(['Rscript --vanilla extraer_tweets.R'], shell=True)
 
 
 ####Fecha inicio y fin
-
+#%%
 if len(sys.argv)>1:
     if len(sys.argv)>2:
         if len(sys.argv)>3:
-            df = archivos_csv(sys.argv[1],sys.argv[2],sys.argv[3])
+            df, f_ini, f_fin = archivos_csv(sys.argv[1],sys.argv[2],sys.argv[3])
         else:
-            df = archivos_csv(sys.argv[1],sys.argv[2])
+            df, f_ini, f_fin = archivos_csv(sys.argv[1],sys.argv[2])
     else:
-        df = archivos_csv(sys.argv[1])
+        df, f_ini, f_fin = archivos_csv(sys.argv[1])
 else:
-    df = archivos_csv()
-
+    df, f_ini, f_fin = archivos_csv()
+#%%
 
 corpus, dictionary, author2doc = preprocesamiento(df)
 print('# de autores: %d' % len(author2doc))
@@ -285,4 +287,26 @@ ep.preprocess(nb, {'metadata': {'path': f+'/LDA/'}})
 
 with open(f+'/LDA/LDA.ipynb', 'wt') as file:
     nbformat.write(nb, file)
+
+#%% Info
+
+data = {
+   'f_ini' : f_ini,
+   'f_fin' : f_fin,
+   'n_aut' : len(author2doc),
+   'n_tok' : len(dictionary),
+   'n_doc' : len(corpus)
+}
+
+
+with open(f+'/info.json', 'w') as outfile:
+    json.dump(data, outfile)
+    
+    
+#%%Mover archivos a www
+
+copyfile(f+'/grafica.html','/var/www/politicaenlinea.com/public_html/temas/grafica.html')
+copyfile(f+'/LDA/lda.html','/var/www/politicaenlinea.com/public_html/temas/lda.html')
+copyfile(f+'/info.json','/var/www/politicaenlinea.com/public_html/temas/info.json')
+
 
