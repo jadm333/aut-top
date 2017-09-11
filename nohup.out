@@ -1,0 +1,164 @@
+  [1] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+ [16] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+ [31] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+ [46] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+ [61] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+ [76] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+ [91] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+[106] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+Loading required package: RMySQL
+Loading required package: methods
+Loading required package: DBI
+NULL
+[1] TRUE
+[1] "1 Terminado: lasillarota"
+[1] "2 Terminado: SinEmbargoMX"
+[1] "3 Terminado: diario24horas"
+[1] "4 Terminado: El_Universal_Mx"
+[1] "5 Terminado: NoticiasMVS"
+[1] "6 Terminado: Excelsior"
+[1] "7 Terminado: Milenio"
+[1] "8 Terminado: Pajaropolitico"
+[1] "9 Terminado: ExpansionMx"
+[1] "10 Terminado: PublimetroMX"
+[1] "11 Terminado: lacronicadehoy"
+[1] "12 Terminado: NTelevisa_com"
+[1] "13 Terminado: Foro_TV"
+[1] "14 Terminado: ActualidadRT"
+[1] "15 Terminado: el_pais"
+[1] "16 Terminado: EfektoNoticias"
+[1] "17 Terminado: informador"
+[1] "18 Terminado: EjeCentral"
+[1] "19 Terminado: FedericoArreola"
+[1] "20 Terminado: EnfoqueNoticias"
+[1] "21 Terminado: Reforma"
+[1] "22 Terminado: ElFinanciero_Mx"
+[1] "23 Terminado: epigmenioibarra"
+[1] "24 Terminado: mileniotv"
+[1] "25 Terminado: Notimex"
+[1] "26 Terminado: eleconomista"
+[1] "27 Terminado: UnoNoticias"
+[1] "28 Terminado: JoseCardenas1"
+[1] "29 Terminado: Radio_Formula"
+[1] "30 Terminado: LaRazon_mx"
+[1] "31 Terminado: elsolde_mexico"
+[1] "32 Terminado: AztecaNoticias"
+[1] "33 Terminado: ElHuffPost"
+[1] "34 Terminado: AristeguiOnline"
+[1] "35 Terminado: lopezdoriga"
+[1] "36 Terminado: sdpnoticias"
+[1] "37 Terminado: julioastillero"
+[1] "38 Terminado: WRADIOMexico"
+[1] "39 Terminado: RicardoAlemanMx"
+[1] "40 Terminado: lajornadaonline"
+[1] "41 Terminado: Imagen_Mx"
+[1] "42 Terminado: PPmerino"
+[1] "43 Terminado: PedroFerriz"
+[1] "44 Terminado: Reporte_Indigo"
+[1] "45 Terminado: RoyCampos"
+[1] "46 Terminado: beltrandelrio"
+[1] "47 Terminado: Yoinfluyo"
+[1] "48 Terminado: sopitas"
+[1] "49 Terminado: warkentin"
+[1] "50 Terminado: LeonKrauze"
+[1] "51 Terminado: genarolozano"
+[1] "52 Terminado: ADNPolitico"
+[1] "53 Terminado: Canal22"
+[1] "54 Terminado: TapiaFernanda"
+[1] "55 Terminado: LuisCardenasMx"
+[1] "56 Terminado: revistaproceso"
+[1] "57 Terminado: jenarovillamil"
+[1] "58 Terminado: MarioBeteta"
+[1] "59 Terminado: dmorenochavez"
+[1] "60 Terminado: jrisco"
+[1] "61 Terminado: mariocampos"
+[1] "62 Terminado: MexicanTimes"
+[1] "63 Terminado: macariomx"
+[1] "64 Terminado: CarlosLoret"
+[1] "65 Terminado: LeonardoCurzio"
+[1] "66 Terminado: arturoangel20"
+[1] "67 Terminado: jairocalixto"
+[1] "68 Terminado: Adela_Micha"
+[1] "69 Terminado: politicomx"
+[1] "70 Terminado: kdartigues"
+[1] "71 Terminado: maurimm"
+[1] "72 Terminado: JohnMAckerman"
+[1] "73 Terminado: SGarciaSoto"
+[1] "74 Terminado: YuririaSierra"
+[1] "75 Terminado: nexosmexico"
+[1] "76 Terminado: FernandoDworak"
+[1] "77 Terminado: soyfdelrincon"
+[1] "78 Terminado: Pizu"
+[1] "79 Terminado: andreslajous"
+[1] "80 Terminado: nacholozano"
+[1] "81 Terminado: CanalOnceTV"
+[1] "82 Terminado: SanjuanaMtz"
+[1] "83 Terminado: alvaro_delgado"
+[1] "84 Terminado: ahope71"
+[1] "85 Terminado: SalCamarena"
+[1] "86 Terminado: hdemauleon"
+[1] "87 Terminado: javieraparicio"
+[1] "88 Terminado: sacroprofano"
+[1] "89 Terminado: CiroGomezL"
+[1] "90 Terminado: DeniseDresserG"
+[1] "91 Terminado: PaolaRojas"
+[1] "92 Terminado: carlosramirezh"
+[1] "93 Terminado: rivapa"
+[1] "94 Terminado: sergioaguayo"
+[1] "95 Terminado: DeniseMaerker"
+[1] "96 Terminado: lydiacachosi"
+[1] "97 Terminado: Amsalazar"
+[1] "98 Terminado: AnaPOrdorica"
+[1] "99 Terminado: jshm00"
+[1] "100 Terminado: esquivelgerardo"
+[1] "101 Terminado: jorgeramosnews"
+[1] "102 Terminado: karlaiberia"
+[1] "103 Terminado: JavierSolorzano"
+[1] "104 Terminado: PabloHiriart"
+[1] "105 Terminado: J_Fdz_Menendez"
+[1] "106 Terminado: DiegoEOsorno"
+[1] "107 Terminado: SergioSarmiento"
+[1] "108 Terminado: puigcarlos"
+[1] "109 Terminado: estarc62"
+[1] "110 Terminado: VILLALVAZO13"
+[1] "111 Terminado: aguilarcamin"
+[1] "112 Terminado: caudillomx"
+[1] "113 Terminado: carloselizondom"
+[1] "114 Terminado: panchogarfias"
+[1] "115 Terminado: E_Q_"
+)07[?47h[1;24r[m[4l[?1h=[m[m[37m[40m[1;1H                                                                                [2;1H                                                                                [3;1H                                                                                [4;1H                                                                                [5;1H                                                                                [6;1H                                                                                [7;1H                                                                                [8;1H                                                                                [9;1H                                                                                [10;1H                                                                                [11;1H                                                                                [12;1H                                                                                [13;1H                                                                                [14;1H                                                                                [15;1H                                                                                [16;1H                                                                                [17;1H                                                                                [18;1H                                                                                [19;1H                                                                                [20;1H                                                                                [21;1H                                                                                [22;1H                                                                                [23;1H                                                                                [24;1H                                                                                [4h[37m[40m [4l[H[m[m[37m[40m[m[m[21B[33m[44m[1mGetting file://localhost/root/aut-top/modelo14/grafica.html                     [22;60H[m[m
+
+[24;1H[2J[?47l8[?1l>sys:1: DtypeWarning: Columns (7) have mixed types. Specify dtype option on import or set low_memory=False.
+/root/anaconda3/lib/python3.6/site-packages/gensim/models/phrases.py:316: UserWarning: For a faster implementation, use the gensim.models.phrases.Phraser class
+  warnings.warn("For a faster implementation, use the gensim.models.phrases.Phraser class")
+# de autores: 115
+# tokens unicos: 57408
+# de documentos: 183716
+Corriendo modelo
+MODELO TERMINADO Y GUARDADO
+Corriendo LDA
+Terminado
+Traceback (most recent call last):
+  File "modelo.py", line 283, in <module>
+    ep.preprocess(nb, {'metadata': {'path': f+'/LDA/'}})
+  File "/root/anaconda3/lib/python3.6/site-packages/nbconvert/preprocessors/execute.py", line 262, in preprocess
+    nb, resources = super(ExecutePreprocessor, self).preprocess(nb, resources)
+  File "/root/anaconda3/lib/python3.6/site-packages/nbconvert/preprocessors/base.py", line 69, in preprocess
+    nb.cells[index], resources = self.preprocess_cell(cell, resources, index)
+  File "/root/anaconda3/lib/python3.6/site-packages/nbconvert/preprocessors/execute.py", line 286, in preprocess_cell
+    raise CellExecutionError.from_cell_and_msg(cell, out)
+nbconvert.preprocessors.execute.CellExecutionError: An error occurred while executing the following cell:
+------------------
+import pyLDAvis.gensim
+pyLDAvis.disable_notebook()
+------------------
+
+[0;31m---------------------------------------------------------------------------[0m
+[0;31mModuleNotFoundError[0m                       Traceback (most recent call last)
+[0;32m<ipython-input-2-3a59f1e2fd4d>[0m in [0;36m<module>[0;34m()[0m
+[0;32m----> 1[0;31m [0;32mimport[0m [0mpyLDAvis[0m[0;34m.[0m[0mgensim[0m[0;34m[0m[0m
+[0m[1;32m      2[0m [0mpyLDAvis[0m[0;34m.[0m[0mdisable_notebook[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0m
+
+[0;31mModuleNotFoundError[0m: No module named 'pyLDAvis'
+ModuleNotFoundError: No module named 'pyLDAvis'
+
